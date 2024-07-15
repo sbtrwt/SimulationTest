@@ -171,6 +171,10 @@ public class WaterContainer : MonoBehaviour
                     activeDrops.RemoveAt(i);
                 }
             }
+            else
+            {
+                Destroy(drop, 10f);
+            }
         }
     }
 
