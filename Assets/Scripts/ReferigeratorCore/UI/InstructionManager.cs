@@ -9,10 +9,10 @@ public class InstructionsManager : MonoBehaviour
 
     private int currentStep = 0;
     private string[] steps = {
-        "Step 1: Remove Items",
-        "Step 2: Clean Shelves",
-        "Step 3: Discard Expired Items",
-        "Step 4: Organize Items"
+        "Step 1: Remove Items to right counter",
+        "Step 2: Clean Shelves! \nUse tools from left.\nUse spray & cloth.",
+        "Step 3: Discard Expired Items.\nExpired item colored red.",
+        "Step 4: Organize Items back to referigerator. User this order. \n Top : Cylinder, Middle : Cube, Bottom : Sphere"
     };
 
     void Start()

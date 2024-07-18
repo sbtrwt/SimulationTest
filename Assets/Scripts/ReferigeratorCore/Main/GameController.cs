@@ -1,12 +1,14 @@
 using TMPro;
 using UnityEngine;
+using System.Linq;
 
 public class GameController : MonoBehaviour
 {
-    [SerializeField] private GameObject[] items;
+    [SerializeField] private ReferigeratorItem[] items;
     [SerializeField] private TMP_Text completionMessage;
     [SerializeField] private InstructionsManager instructionsManager;
     [SerializeField] private int maxCleanPoint = 6;
+    [SerializeField] private int maxItemOut = 0;
     [SerializeField] private Transform cleaningPoint;
     [SerializeField] private GameOverUI gameOverUI;
 
@@ -17,7 +19,10 @@ public class GameController : MonoBehaviour
     // Define the event
     private void Start()
     {
-      
+        if (items != null)
+        { 
+            maxItemOut = items.Where(x => !x.IsOutside).Count(); 
+        }
     }
 
 
@@ -47,28 +52,24 @@ public class GameController : MonoBehaviour
     // Method to be called when an item is removed
     public void IncreaseItemRemovedCount()
     {
-        itemRemovedCount++;
-        if(items != null && itemRemovedCount >= items.Length)
+        if (items.Count() == items.Where(x => x.IsOutside).Count())
         {
-            itemRemovedCount = items.Length;
             cleaningPoint.gameObject.SetActive(true);
             instructionsManager.NextStep();
         }
-        Debug.Log("Item removed. Current count: " + itemRemovedCount);
     }
     public void DecreseItemRemovedCount()
     {
-        itemRemovedCount--;
-        if (itemRemovedCount <= 0)
+      
+        if (items.Where(x => !x.IsExpired).Count() == items.Where(x => !x.IsOutside && !x.IsExpired && x.IsRightPlace).Count())
         {
-            itemRemovedCount = 0;
-            Debug.Log("Item removed. Current count: " + itemRemovedCount);
             if (isCleaned)
             {
                 OrganizeItems();
                 instructionsManager.NextStep();
             }
         }
+        
       
     }
     private void CountCleaningPoint() 
@@ -79,6 +80,7 @@ public class GameController : MonoBehaviour
             CleanShelves();
             cleanPointCount = maxCleanPoint;
             cleaningPoint.gameObject.SetActive(false);
+           
             instructionsManager.NextStep();
         }
         Debug.Log("Cleanin action count : " + cleanPointCount);

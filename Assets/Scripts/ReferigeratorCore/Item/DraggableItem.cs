@@ -11,12 +11,14 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public delegate void ItemRemovedHandler();
     public static event ItemRemovedHandler OnItemRemoved;
     public static event ItemRemovedHandler OnItemOrganized;
+    private ReferigeratorItem referigeratorItem;
     void Start()
     {
         mainCamera = Camera.main;
         objectCollider = GetComponent<Collider>();
         // Store the initial position
         initialPosition = transform.position;
+        referigeratorItem = GetComponent<ReferigeratorItem>();
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -44,15 +46,32 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             float objectHeight = objectCollider.bounds.extents.y;
             // Snap the item's position to the hit point, adjusted to be on top of the surface
             transform.position = hit.point + Vector3.up * objectHeight;
+            
             if (hit.collider.CompareTag("itemcounter"))
             {
+                if (referigeratorItem != null)
+                {
+                    referigeratorItem.IsOutside = true;
+                }
                 // Trigger the event
                 OnItemRemoved?.Invoke();
+               
             }
             if (hit.collider.CompareTag("section"))
             {
+                if (referigeratorItem != null)
+                {
+                    referigeratorItem.IsOutside = false;
+                    SectionController sectionController = hit.collider.GetComponent<SectionController>();
+                    Debug.Log(sectionController);
+                    if(sectionController != null)
+                    {
+                        referigeratorItem.IsRightPlace = referigeratorItem.ItemType == sectionController.ItemHoldType;
+                    }
+                }
                 // Trigger the event
                 OnItemOrganized?.Invoke();
+                
             }
         }
         else
