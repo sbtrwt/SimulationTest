@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using System.Linq;
+using Simulation.Sound;
 
 public class GameController : MonoBehaviour
 {
@@ -37,6 +38,7 @@ public class GameController : MonoBehaviour
             string message = "Refrigerator successfully cleaned and organized!\n Time taken - " + string.Format("{0:00}:{1:00}", minutes, seconds);
             DisplayCompletionMessage(message);
             gameOverUI.GameOver(message);
+            SoundManager.Instance.Play(SoundType.Complete);
             isGameOver = true;
         }
     }
@@ -56,8 +58,6 @@ public class GameController : MonoBehaviour
 
     private void DisplayCompletionMessage(string message)
     {
-       
-
         completionMessage.text = message;
     }
 
@@ -75,7 +75,10 @@ public class GameController : MonoBehaviour
     }
     public void DecreseItemRemovedCount()
     {
-        if (items.Where(x => !x.IsExpired).Count() == items.Where(x => !x.IsOutside && !x.IsExpired && x.IsRightPlace).Count())
+        //Debug.Log("IsExpired count : " + items.Where(x => !x.IsExpired).Count());
+        //Debug.Log("Inside count : " + items.Where(x => !x.IsOutside && !x.IsExpired && x.IsRightPlace).Count());
+        //Debug.Log("Inside ex[p count : " + items.Where(x => !x.IsOutside && x.IsExpired).Count());
+        if (items.Where(x => !x.IsOutside && x.IsExpired ).Count() == 0 && items.Where(x => !x.IsExpired).Count() == items.Where(x => !x.IsOutside && !x.IsExpired && x.IsRightPlace).Count())
         {  
             if (isCleaned)
             {

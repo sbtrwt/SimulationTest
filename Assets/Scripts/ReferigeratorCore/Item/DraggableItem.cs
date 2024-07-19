@@ -1,3 +1,4 @@
+using Simulation.Sound;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -20,10 +21,14 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         initialPosition = transform.position;
         referigeratorItem = GetComponent<ReferigeratorItem>();
     }
-
+    public void OnMouseDown()
+    {
+        SoundManager.Instance.Play(SoundType.ButtonClick);
+    }
     public void OnBeginDrag(PointerEventData eventData)
     {
         Debug.Log("drag start : " );
+      
         // Calculate offset between object position and mouse position
         offset = transform.position - GetMouseWorldPosition(eventData);
     }

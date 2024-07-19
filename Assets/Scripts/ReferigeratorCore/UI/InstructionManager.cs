@@ -1,4 +1,5 @@
 // InstructionsManager.cs
+using Simulation.Sound;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -26,6 +27,7 @@ public class InstructionsManager : MonoBehaviour
         {
             currentStep++;
             UpdateInstructions();
+            SoundManager.Instance.Play(SoundType.Complete);
         }
     }
     public void PrevStep()
