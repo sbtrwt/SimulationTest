@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-public class CleaningItem : MonoBehaviour, IDragHandler
+public class CleaningItem : MonoBehaviour, IDragHandler, IEndDragHandler
 {
     public ParticleSystem actionParticles;
     [SerializeField] private LayerMask cleanLayerMask;
@@ -38,6 +38,10 @@ public class CleaningItem : MonoBehaviour, IDragHandler
         {
             actionParticles.Stop();
         }
+    }
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        actionParticles.Stop();
     }
     void OnDrawGizmos()
     {

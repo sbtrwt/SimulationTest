@@ -11,8 +11,8 @@ public class InstructionsManager : MonoBehaviour
     private string[] steps = {
         "Step 1: Remove Items to right counter",
         "Step 2: Clean Shelves! \nUse tools from left.\nUse spray & cloth.",
-        "Step 3: Discard Expired Items.\nExpired item colored red.",
-        "Step 4: Organize Items back to referigerator. User this order. \n Top : Cylinder, Middle : Cube, Bottom : Sphere"
+        "Step 3: Discard Expired Items(colored red)."+
+        "\nStep 4: Organize Items back to referigerator. User this order. \n Top : Cylinder, Middle : Cube, Bottom : Sphere"
     };
 
     void Start()
@@ -28,7 +28,14 @@ public class InstructionsManager : MonoBehaviour
             UpdateInstructions();
         }
     }
-
+    public void PrevStep()
+    {
+        if (currentStep > 0 )
+        {
+            currentStep--;
+            UpdateInstructions();
+        }
+    }
     private void UpdateInstructions()
     {
         instructionsText.text = steps[currentStep];

@@ -8,45 +8,57 @@ public class GameController : MonoBehaviour
     [SerializeField] private TMP_Text completionMessage;
     [SerializeField] private InstructionsManager instructionsManager;
     [SerializeField] private int maxCleanPoint = 6;
-    [SerializeField] private int maxItemOut = 0;
+   
     [SerializeField] private Transform cleaningPoint;
     [SerializeField] private GameOverUI gameOverUI;
 
+    public delegate void GameStateHandler();
+    public static event GameStateHandler OnGameOver;
+
     private bool isCleaned = false;
     private bool isOrganized = false;
-    private int itemRemovedCount = 0;
+    private bool isItemOut = false;
+    private bool isGameOver = false;
     private int cleanPointCount = 0;
     // Define the event
     private void Start()
     {
-        if (items != null)
-        { 
-            maxItemOut = items.Where(x => !x.IsOutside).Count(); 
-        }
+       
     }
 
 
     void Update()
     {
-        if ( isCleaned && isOrganized)
+        if (!isGameOver &&  isCleaned && isOrganized)
         {
-            DisplayCompletionMessage();
-            gameOverUI.GameOver("Refrigerator successfully cleaned and organized!");
+            OnGameOver?.Invoke();
+            float minutes = Mathf.FloorToInt(Timer.TimeTaken / 60);
+            float seconds = Mathf.FloorToInt(Timer.TimeTaken % 60);
+            string message = "Refrigerator successfully cleaned and organized!\n Time taken - " + string.Format("{0:00}:{1:00}", minutes, seconds);
+            DisplayCompletionMessage(message);
+            gameOverUI.GameOver(message);
+            isGameOver = true;
         }
     }
-    public void CleanShelves()
+    public void SetCleanShelves(bool isCleanedToSet)
     {
-        isCleaned = true;
+       isCleaned = isCleanedToSet;
     }
 
-    public void OrganizeItems()
+    public void SetOrganizeItems(bool isOrganizedToSet)
     {
-        isOrganized = true;
+        isOrganized = isOrganizedToSet;
+    }
+    public void SetItemOut(bool isItemOutToSet)
+    {
+        isItemOut = isItemOutToSet;
     }
 
-    private void DisplayCompletionMessage()
+    private void DisplayCompletionMessage(string message)
     {
-        completionMessage.text = "Refrigerator successfully cleaned and organized!";
+       
+
+        completionMessage.text = message;
     }
 
     // Method to be called when an item is removed
@@ -55,18 +67,30 @@ public class GameController : MonoBehaviour
         if (items.Count() == items.Where(x => x.IsOutside).Count())
         {
             cleaningPoint.gameObject.SetActive(true);
-            instructionsManager.NextStep();
+           
+            if(!isItemOut)
+                instructionsManager.NextStep();
+            SetItemOut(true);
         }
     }
     public void DecreseItemRemovedCount()
     {
-      
         if (items.Where(x => !x.IsExpired).Count() == items.Where(x => !x.IsOutside && !x.IsExpired && x.IsRightPlace).Count())
-        {
+        {  
             if (isCleaned)
             {
-                OrganizeItems();
-                instructionsManager.NextStep();
+                if(!isOrganized)
+                    instructionsManager.NextStep();
+                SetOrganizeItems(true);
+            }
+        }
+        else
+        {
+            if (!isCleaned)
+            {
+                cleaningPoint.gameObject.SetActive(false);
+                SetItemOut(false);
+                instructionsManager.PrevStep();
             }
         }
         
@@ -74,16 +98,19 @@ public class GameController : MonoBehaviour
     }
     private void CountCleaningPoint() 
     {
-        cleanPointCount++;
-        if (cleanPointCount >= maxCleanPoint-1)
+        if (items.Count() == items.Where(x => x.IsOutside).Count())
         {
-            CleanShelves();
-            cleanPointCount = maxCleanPoint;
-            cleaningPoint.gameObject.SetActive(false);
+            cleanPointCount++;
+            if (cleanPointCount >= maxCleanPoint - 1)
+            {
+                SetCleanShelves(true);
+                cleanPointCount = maxCleanPoint;
+                cleaningPoint.gameObject.SetActive(false);
+
+                instructionsManager.NextStep();
+            }
            
-            instructionsManager.NextStep();
         }
-        Debug.Log("Cleanin action count : " + cleanPointCount);
     }
     private void OnEnable()
     {

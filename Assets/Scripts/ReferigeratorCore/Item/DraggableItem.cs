@@ -63,11 +63,14 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
                 {
                     referigeratorItem.IsOutside = false;
                     SectionController sectionController = hit.collider.GetComponent<SectionController>();
-                    Debug.Log(sectionController);
+                    
                     if(sectionController != null)
                     {
                         referigeratorItem.IsRightPlace = referigeratorItem.ItemType == sectionController.ItemHoldType;
                     }
+                    //Debug.Log("referigeratorItem.ItemType : " + referigeratorItem.ItemType);
+                    //Debug.Log("sectionController.ItemType : " + sectionController.ItemHoldType);
+
                 }
                 // Trigger the event
                 OnItemOrganized?.Invoke();

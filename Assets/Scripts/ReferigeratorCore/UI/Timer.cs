@@ -6,14 +6,16 @@ using UnityEngine.UI;
 public class Timer : MonoBehaviour
 {
     public TMP_Text timerText;
+    [SerializeField] private float maxTime = 300f;
     [SerializeField] private float timeRemaining = 300f;
     [SerializeField] private bool timerIsRunning = false;
     [SerializeField] private GameOverUI gameOverUI ;
-
+    public static float TimeTaken;
     void Start()
     {
+        timeRemaining = maxTime;
         gameOverUI.gameObject.SetActive(false);
-           timerIsRunning = true;
+        timerIsRunning = true;
     }
 
     void Update()
@@ -24,6 +26,7 @@ public class Timer : MonoBehaviour
             {
                 timeRemaining -= Time.deltaTime;
                 DisplayTime(timeRemaining);
+                TimeTaken = maxTime - timeRemaining;
             }
             else
             {
@@ -41,5 +44,25 @@ public class Timer : MonoBehaviour
         float seconds = Mathf.FloorToInt(timeToDisplay % 60);
         timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
-    
+    public void EnableTimerCount(bool isEnable) 
+    {
+        timerIsRunning = isEnable;
+    }
+    private void OnGameOver()
+    {
+        EnableTimerCount(false);
+    }
+
+    private void OnEnable()
+    {
+        GameController.OnGameOver += OnGameOver;
+       
+    }
+
+    private void OnDisable()
+    {
+        GameController.OnGameOver -= OnGameOver;
+     
+
+    }
 }
