@@ -75,9 +75,9 @@ public class GameController : MonoBehaviour
     }
     public void DecreseItemRemovedCount()
     {
-        //Debug.Log("IsExpired count : " + items.Where(x => !x.IsExpired).Count());
-        //Debug.Log("Inside count : " + items.Where(x => !x.IsOutside && !x.IsExpired && x.IsRightPlace).Count());
-        //Debug.Log("Inside ex[p count : " + items.Where(x => !x.IsOutside && x.IsExpired).Count());
+        Debug.Log("IsExpired count : " + items.Where(x => !x.IsExpired).Count());
+        Debug.Log("Inside count : " + items.Where(x => !x.IsOutside && !x.IsExpired && x.IsRightPlace).Count());
+        Debug.Log("Inside ex[p count : " + items.Where(x => !x.IsOutside && x.IsExpired).Count());
         if (items.Where(x => !x.IsOutside && x.IsExpired ).Count() == 0 && items.Where(x => !x.IsExpired).Count() == items.Where(x => !x.IsOutside && !x.IsExpired && x.IsRightPlace).Count())
         {  
             if (isCleaned)

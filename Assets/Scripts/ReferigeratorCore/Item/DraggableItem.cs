@@ -72,9 +72,9 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
                     if(sectionController != null)
                     {
                         referigeratorItem.IsRightPlace = referigeratorItem.ItemType == sectionController.ItemHoldType;
+                    Debug.Log("referigeratorItem.ItemType : " + referigeratorItem.ItemType);
+                    Debug.Log("sectionController.ItemType : " + sectionController.ItemHoldType);
                     }
-                    //Debug.Log("referigeratorItem.ItemType : " + referigeratorItem.ItemType);
-                    //Debug.Log("sectionController.ItemType : " + sectionController.ItemHoldType);
 
                 }
                 // Trigger the event
