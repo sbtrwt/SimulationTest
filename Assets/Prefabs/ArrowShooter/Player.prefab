@@ -148,7 +148,6 @@ GameObject:
   - component: {fileID: 7033172275911089919}
   - component: {fileID: 3939004259738117646}
   - component: {fileID: 1268396248969032385}
-  - component: {fileID: 7587732665079218457}
   - component: {fileID: 615806504847202730}
   - component: {fileID: 7085172876782417515}
   - component: {fileID: 2782817573251514145}
@@ -226,27 +225,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!65 &1268396248969032385
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8531024690964855413}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!65 &7587732665079218457
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -410,10 +388,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a94f3f8e0f534742b8f1bf02c4d8c05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
+  forceMultiplier: 10
+  shootPreview: {fileID: 7085172876782417515}
+  ghostArrow: {fileID: 494933086233952813}
+  xSensitivity: 1
   maxXPosition: 4
   laneChangeSmoothness: 10
-  minSwipeDistance: 50
-  shootForceMultiplier: 10
-  shootPreview: {fileID: 494933086233952813}
-  ghostArrow: {fileID: 7085172876782417515}
+  moveSpeed: 5
