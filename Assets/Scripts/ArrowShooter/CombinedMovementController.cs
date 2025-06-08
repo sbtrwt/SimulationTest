@@ -9,7 +9,7 @@ public class CombinedMovementController : MonoBehaviour
     public float forceMultiplier = 10f;
     public LineRenderer shootPreview;
     public LineRenderer ghostArrow;
-    
+
     [Header("X Movement Settings")]
     public float xSensitivity = 1f;
     public float maxXPosition = 4f;
@@ -20,13 +20,12 @@ public class CombinedMovementController : MonoBehaviour
     private Vector3 dragStartPos;
     private bool isDragging = false;
     private float targetXPosition;
-    private bool canControlX = true;
-
+    private bool isHorizontalMovementEnabled = true;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         targetXPosition = transform.position.x;
-        
+
         // Initialize line renderers
         shootPreview.positionCount = 2;
         shootPreview.material = new Material(Shader.Find("Sprites/Default"));
@@ -53,15 +52,17 @@ public class CombinedMovementController : MonoBehaviour
 
     void FixedUpdate()
     {
-        ApplyXMovement();
+        if (isHorizontalMovementEnabled)
+        {
+            ApplyXMovement();
+        }
+
     }
 
     void HandleXMovement()
     {
-        if (!canControlX) return;
-
         float xInput = 0f;
-        
+
         // Get input only when not dragging
         if (!isDragging)
         {
@@ -87,24 +88,24 @@ public class CombinedMovementController : MonoBehaviour
         {
             targetXPosition += xInput * xSensitivity;
             targetXPosition = Mathf.Clamp(targetXPosition, -maxXPosition, maxXPosition);
+            isHorizontalMovementEnabled = true;
+        }
+        else
+        {
+            isHorizontalMovementEnabled = false; // Disable horizontal movement if no input 
         }
     }
 
     void ApplyXMovement()
     {
-        if (rb.velocity.magnitude < 0.1f)
-        {
-            canControlX = false;
-            return;
-        }
-        else
-        {
-            canControlX = true;
-        }
-
         Vector3 newPosition = transform.position;
         newPosition.x = Mathf.Lerp(transform.position.x, targetXPosition, laneChangeSmoothness * Time.fixedDeltaTime);
-        transform.position = newPosition;
+
+        // Only update X position, preserve existing Y and Z movement
+        rb.MovePosition(new Vector3(newPosition.x, transform.position.y, transform.position.z));
+        Debug.Log("New Position: " + newPosition + " Target X: " + targetXPosition);
+
+
     }
 
     void HandleDragInput()
@@ -152,24 +153,18 @@ public class CombinedMovementController : MonoBehaviour
     void EndDrag()
     {
         Vector3 dragEndPos = Input.mousePosition;
-        Vector3 force = new Vector3(
-            dragStartPos.x - dragEndPos.x,
-            0,
-            dragStartPos.y - dragEndPos.y
-        ) * forceMultiplier;
+        // Vector3 force = new Vector3(
+        //     dragStartPos.x - dragEndPos.x,
+        //     0,
+        //     dragStartPos.y - dragEndPos.y
+        // ) * forceMultiplier;
+        Vector3 force = dragStartPos - dragEndPos;
+        force.z = force.y;
+        force.y = 0;
+        rb.AddForce(force * forceMultiplier);
 
-        rb.AddForce(force);
-        
         shootPreview.enabled = false;
         ghostArrow.enabled = false;
         isDragging = false;
-        
-        StartCoroutine(EnableXControlAfterDelay(1f));
-    }
-
-    IEnumerator EnableXControlAfterDelay(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        canControlX = true;
     }
 }
