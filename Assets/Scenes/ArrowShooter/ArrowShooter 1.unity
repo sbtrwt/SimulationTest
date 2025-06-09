@@ -233,6 +233,58 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 267276650}
   m_CullTransparentMesh: 1
+--- !u!1 &329638849
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 329638851}
+  - component: {fileID: 329638850}
+  m_Layer: 0
+  m_Name: SpeedBoosterSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &329638850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 329638849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5240f86c3c9b9d4a9b7f869977e68f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speedBoosterPrefab: {fileID: 8168958916355728113, guid: a85ff05663e40734c9dfa14d69671071, type: 3}
+  spawnPoints: []
+  respawnTime: 10
+  randomSpawnOrder: 1
+  minBoostPower: 1.5
+  maxBoostPower: 3
+  minBoostDuration: 2
+  maxBoostDuration: 5
+--- !u!4 &329638851
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 329638849}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 4.14}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &526175956
 GameObject:
   m_ObjectHideFlags: 0
@@ -962,7 +1014,7 @@ GameObject:
   - component: {fileID: 1361875473}
   - component: {fileID: 1361875477}
   m_Layer: 0
-  m_Name: SpeedBooster
+  m_Name: SpeedUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1265,6 +1317,11 @@ MonoBehaviour:
   platformSpacing: 0
   minPlatformsAhead: 4
   maxPlatformsAhead: 7
+  speedBoosterPrefab: {fileID: 8168958916355728113, guid: a85ff05663e40734c9dfa14d69671071, type: 3}
+  boosterSpawnChance: 0.3
+  minBoosterDistance: 3
+  maxBoostersPerPlatform: 2
+  boosterScale: {x: 1, y: 1, z: 1}
   player: {fileID: 5850096193670922574}
   activationDistance: 40
 --- !u!1 &1732087133
@@ -1834,6 +1891,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Cube
       objectReference: {fileID: 0}
+    - target: {fileID: 8531024690964855413, guid: 9b0a8a05e8439644788afe00f0c72836, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1863,6 +1924,67 @@ MonoBehaviour:
   speedText: {fileID: 1771517232}
   unit: ' km/h'
   multiplier: 3.6
+--- !u!1001 &6425846449692696572
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5346717960655479213, guid: a85ff05663e40734c9dfa14d69671071, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5346717960655479213, guid: a85ff05663e40734c9dfa14d69671071, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.92
+      objectReference: {fileID: 0}
+    - target: {fileID: 5346717960655479213, guid: a85ff05663e40734c9dfa14d69671071, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 5.72
+      objectReference: {fileID: 0}
+    - target: {fileID: 5346717960655479213, guid: a85ff05663e40734c9dfa14d69671071, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5346717960655479213, guid: a85ff05663e40734c9dfa14d69671071, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5346717960655479213, guid: a85ff05663e40734c9dfa14d69671071, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5346717960655479213, guid: a85ff05663e40734c9dfa14d69671071, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5346717960655479213, guid: a85ff05663e40734c9dfa14d69671071, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5346717960655479213, guid: a85ff05663e40734c9dfa14d69671071, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5346717960655479213, guid: a85ff05663e40734c9dfa14d69671071, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8168958916355728113, guid: a85ff05663e40734c9dfa14d69671071, type: 3}
+      propertyPath: m_Name
+      value: SpeedBooster
+      objectReference: {fileID: 0}
+    - target: {fileID: 8168958916355728113, guid: a85ff05663e40734c9dfa14d69671071, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a85ff05663e40734c9dfa14d69671071, type: 3}
 --- !u!1001 &9084909584374407355
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1937,3 +2059,5 @@ SceneRoots:
   - {fileID: 1497417411}
   - {fileID: 526175959}
   - {fileID: 1361875476}
+  - {fileID: 6425846449692696572}
+  - {fileID: 329638851}

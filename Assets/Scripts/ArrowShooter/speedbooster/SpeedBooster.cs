@@ -1,75 +1,61 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
-public class SpeedBooster : MonoBehaviour
+public class PlatformerSpeedBooster : MonoBehaviour
 {
     [Header("Boost Settings")]
-    public float boostMultiplier = 2f; // How much to multiply the speed
-    public float boostDuration = 3f; // How long the boost lasts
-    public ParticleSystem boostEffect; // Optional visual effect
+    public float speedMultiplier = 1.5f;
+    public float duration = 2f;
+    public bool affectJump = true;
+    public float jumpMultiplier = 1.2f;
+
+    [Header("Effects")]
+    public ParticleSystem collectEffect;
+    public AudioClip collectSound;
+    public UnityEvent onCollected;
 
     private void OnTriggerEnter(Collider other)
     {
-        // Check if the colliding object has a specific tag or component
-        if (other.CompareTag("Player")) // Or check for other.GetComponent<VehicleController>()
+        if (other.CompareTag("Player"))
         {
-            // Apply boost to the object
             ApplyBoost(other.gameObject);
-            
-            // Play visual effect if assigned
-            if (boostEffect != null)
-            {
-                boostEffect.Play();
-            }
-            
-            // Optional: Disable the booster temporarily
-            GetComponent<Collider>().enabled = false;
-            GetComponent<Renderer>().enabled = false;
-            Invoke("ResetBooster", 5f); // Reset after 5 seconds
+            PlayEffects();
+            onCollected.Invoke();
+            Destroy(gameObject);
         }
     }
 
-    private void ApplyBoost(GameObject target)
+    private void ApplyBoost(GameObject player)
     {
-        // Option 1: If using Rigidbody physics
-        Rigidbody rb = target.GetComponent<Rigidbody>();
-        if (rb != null)
-        {
-            StartCoroutine(BoostRigidbody(rb));
-            return;
-        }
-        
-        // // Option 2: If using a custom movement script
-        // VehicleController vehicle = target.GetComponent<VehicleController>();
-        // if (vehicle != null)
+        // Try different movement controllers
+        // if (player.TryGetComponent<PlatformerMovement>(out PlatformerMovement movement))
         // {
-        //     StartCoroutine(BoostVehicle(vehicle));
+        //     movement.ApplySpeedBoost(speedMultiplier, duration, affectJump ? jumpMultiplier : 1f);
         // }
+        // else 
+        if (player.TryGetComponent<Rigidbody>(out Rigidbody rb))
+        {
+            StartCoroutine(PhysicsBoost(rb));
+        }
     }
 
-    private IEnumerator BoostRigidbody(Rigidbody rb)
+    private IEnumerator PhysicsBoost(Rigidbody rb)
     {
-        float originalDrag = rb.drag;
-        rb.drag = originalDrag / boostMultiplier; // Reduce drag to increase speed
+        float originalSpeed = rb.velocity.magnitude;
+        rb.velocity *= speedMultiplier;
         
-        yield return new WaitForSeconds(boostDuration);
+        yield return new WaitForSeconds(duration);
         
-        rb.drag = originalDrag; // Reset to original drag
+        rb.velocity = rb.velocity.normalized * originalSpeed;
     }
 
-    // private IEnumerator BoostVehicle(VehicleController vehicle)
-    // {
-    //     float originalSpeed = vehicle.maxSpeed;
-    //     vehicle.maxSpeed *= boostMultiplier;
-        
-    //     yield return new WaitForSeconds(boostDuration);
-        
-    //     vehicle.maxSpeed = originalSpeed;
-    // }
-
-    private void ResetBooster()
+    private void PlayEffects()
     {
-        GetComponent<Collider>().enabled = true;
-        GetComponent<Renderer>().enabled = true;
+        if (collectEffect != null)
+            Instantiate(collectEffect, transform.position, Quaternion.identity);
+        
+        if (collectSound != null)
+            AudioSource.PlayClipAtPoint(collectSound, transform.position);
     }
 }
